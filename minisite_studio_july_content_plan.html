@@ -1,0 +1,402 @@
+
+<style>
+  :root {
+    --sage: #8a9e8c;
+    --sage-light: #eef2ee;
+    --amber-skin: #c9a97a;
+    --amber-light: #faf3ea;
+    --clay: #b5826a;
+    --clay-light: #f7ede7;
+    --ink: #2c2c2a;
+    --muted: #888780;
+    --surface: var(--color-background-primary);
+    --border: var(--color-border-tertiary);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1.5rem 0; max-width: 680px; }
+  .header { margin-bottom: 1.5rem; }
+  .header h1 { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .header h2 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .header p { font-size: 14px; color: var(--color-text-secondary); margin-top: 6px; line-height: 1.6; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .week { margin-bottom: 1.5rem; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .week-header { padding: 10px 16px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; justify-content: space-between; }
+  .week-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-secondary); }
+  .week-theme { font-size: 12px; color: var(--color-text-tertiary); font-style: italic; }
+
+  .posts { display: grid; grid-template-columns: repeat(5, 1fr); }
+  .post { padding: 12px; border-right: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: background 0.15s; position: relative; }
+  .post:last-child { border-right: none; }
+  .post:hover { background: var(--color-background-secondary); }
+  .post.active { background: var(--color-background-secondary); }
+  .post-day { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-tertiary); margin-bottom: 6px; }
+  .post-date { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 8px; }
+  .type-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; margin-bottom: 8px; }
+  .post-pillar { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; font-weight: 500; }
+  .post-title { font-size: 12px; color: var(--color-text-primary); line-height: 1.5; }
+
+  .type-carousel { background: #eef2ee; color: #3a5c3c; }
+  .type-single { background: #faf3ea; color: #7a5a2a; }
+  .type-reel { background: #f0ecf8; color: #5c3a8a; }
+
+  .detail-panel { border-top: 0.5px solid var(--color-border-tertiary); padding: 1.25rem 1.5rem; background: var(--color-background-primary); display: none; }
+  .detail-panel.show { display: block; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .detail-section { }
+  .detail-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-tertiary); margin-bottom: 6px; }
+  .detail-content { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .detail-hook { font-size: 14px; font-weight: 500; color: var(--color-text-primary); line-height: 1.5; border-left: 2px solid #8a9e8c; padding-left: 10px; margin-bottom: 12px; }
+  .caption-preview { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; font-style: italic; }
+  .detail-close { float: right; font-size: 12px; color: var(--color-text-tertiary); cursor: pointer; background: none; border: none; font-family: var(--font-sans); padding: 0; }
+  .detail-close:hover { color: var(--color-text-primary); }
+  .detail-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+
+  @media (max-width: 600px) {
+    .posts { grid-template-columns: 1fr; }
+    .post { border-right: none; border-bottom: 0.5px solid var(--color-border-tertiary); }
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<h2 class="sr-only">Minisite Studio — July 2025 Instagram content plan, 5 posts per week across 4 weeks</h2>
+
+<div class="wrap">
+  <div class="header">
+    <h1>Minisite Studio · Webcare</h1>
+    <h2>July Content Plan</h2>
+    <p>5 posts / week · 3 carousels · 1 single · 1 reel · Click any post to see the full brief.</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#5a8c5c"></div> Carousel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c9a97a"></div> Single / GIF</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7c5ab8"></div> Reel</div>
+  </div>
+
+  <div id="weeks-container"></div>
+</div>
+
+<script>
+const weeks = [
+  {
+    label: "Week 1",
+    dates: "Jul 1–5",
+    theme: "Introduction — meet the routine",
+    posts: [
+      {
+        day: "Tue", date: "Jul 1", type: "carousel", pillar: "Ingredient Label",
+        title: "What's actually in a good website?",
+        hook: "You read the label on your serum. Why not your website?",
+        slides: "6 slides: Cover → 'Active Ingredients' list (copy, navigation, mobile, speed, SEO, CTA) → one slide per ingredient, INCI-label style → final slide: 'Full formula available — Book a Skin Check'",
+        caption: "Your website has ingredients too. Most small business sites are missing the actives that actually make them work. Here's what we check for. 🧴 #webcare #websitedesign #smallbusinesswebsite",
+        notes: "Visual: flat INCI-style label design, cream paper texture, mono font for ingredient names. This is the brand-introduction carousel — sets the 'ingredient label' format readers will recognise.",
+        hashtags: ["#webcare", "#websitedesign", "#brandstudio", "#smallbusinesstips", "#webdesignstudio"]
+      },
+      {
+        day: "Wed", date: "Jul 2", type: "reel", pillar: "Patch Test",
+        title: "30-second website audit: would it pass the patch test?",
+        hook: "Before you commit to a formula, you patch test it.",
+        slides: "Voiceover reel: screen-record a real (anonymised) homepage scroll. Pause on 3 issues — no clear CTA, buried contact, generic headline. End card: 'This is what a Skin Check catches.'",
+        caption: "A patch test is how you check for reactions before they cause damage. We do the same thing with websites. 👁️ Drop your URL in our bio to book yours.",
+        notes: "Reel format, 30–45s. Calm VO, no hype. Use on-screen text callouts styled as clinical annotations. No face-to-camera needed.",
+        hashtags: ["#websiteaudit", "#webcare", "#smallbusinesswebsite", "#freelancewebdesigner"]
+      },
+      {
+        day: "Thu", date: "Jul 3", type: "carousel", pillar: "Routine Breakdown",
+        title: "The full Webcare routine, explained",
+        hook: "A good skincare routine isn't random. Neither is ours.",
+        slides: "7 slides: Cover → one slide per step: Skin Check / Cleanse / Serum / Moisturiser / SPF / Spot Treatment → Final: 'Most clients start with the Skin Check — it's free.'",
+        caption: "Every service we offer maps to a step in your website's routine. Some businesses need the full regimen. Some just need a spot treatment. We'll tell you which. ✦",
+        notes: "Visual: vertical timeline layout, each step named and described in one line. Apothecary aesthetic — amber, linen, clean serif. This is the core service-intro carousel.",
+        hashtags: ["#webdesign", "#brandingstudio", "#websiteroutine", "#webcare", "#smallbusiness"]
+      },
+      {
+        day: "Fri", date: "Jul 4", type: "single", pillar: "Texture Shot",
+        title: "Ambient brand drop — the studio aesthetic",
+        hook: "(No hook — ambient brand-building)",
+        slides: "Single image: flat-lay of amber dropper bottle, linen swatch, botanical sprig, handwritten note card. Studio palette only. No text overlay except wordmark.",
+        caption: "Calm, considered, precise. Welcome to Webcare. 🌿",
+        notes: "This is the first pure brand aesthetic post. Should feel like a skincare brand's editorial shot. Use to anchor the visual identity early.",
+        hashtags: ["#brandidentity", "#webstudio", "#apothecaryaesthetic", "#visualidentity", "#webcare"]
+      },
+      {
+        day: "Sat", date: "Jul 5", type: "carousel", pillar: "Daily Routine Tips",
+        title: "5 things your homepage should do — and usually doesn't",
+        hook: "A gorgeous homepage that doesn't convert is just a pretty brochure.",
+        slides: "6 slides: Hook → Tip 1: One clear headline that says who you help → Tip 2: A visible CTA above the fold → Tip 3: Social proof close to the offer → Tip 4: Mobile-first layout → Tip 5: Fast load time → CTA: 'Is yours doing all 5? Book a free Skin Check.'",
+        caption: "Most homepages look the part but don't do the job. Here are 5 things yours should be doing — right now. 🧴",
+        notes: "This is the highest-value tip carousel. Keep each slide to one action with a short explanation. Should feel like advice from a specialist, not a listicle.",
+        hashtags: ["#websitetips", "#homepagedesign", "#webcare", "#conversionoptimisation", "#smallbusinesstips"]
+      }
+    ]
+  },
+  {
+    label: "Week 2",
+    dates: "Jul 8–12",
+    theme: "Diagnosis — the problems clients actually have",
+    posts: [
+      {
+        day: "Tue", date: "Jul 8", type: "carousel", pillar: "Ingredient Label",
+        title: "SPF for your website: what accessibility and SEO actually do",
+        hook: "You wouldn't skip SPF once your skin's looking good. Don't skip this either.",
+        slides: "6 slides: Cover → 'SPF = Protection' reframe → What SEO does in plain language → What accessibility does → Why most sites skip both → Final: 'We build SPF in from the start.'",
+        caption: "SPF is the step everyone skips until they get burned. SEO and accessibility are your website's long-term protection. We include both in every build. ☀️",
+        notes: "INCI label format for the SEO/accessibility ingredients — e.g. 'Meta Title: 100% organic reach support.' Clinical, dry humour welcome.",
+        hashtags: ["#websiteSEO", "#webdesign", "#accessibility", "#webcare", "#digitalmarketing"]
+      },
+      {
+        day: "Wed", date: "Jul 9", type: "reel", pillar: "Daily Routine Tips",
+        title: "The 60-second website health check you can do right now",
+        hook: "You don't need us to know if your website has a problem.",
+        slides: "Tutorial reel: 3 checks anyone can do — Google yourself (does your site appear? Does the meta description make sense?), open on mobile (is anything cut off?), time how long the homepage takes to load. End card: 'If any of those flagged up, book a Skin Check.'",
+        caption: "Three things. Sixty seconds. Do them now and come back and tell us what you found. 🔍",
+        notes: "Short reel, instructional. On-screen text only, no face-to-camera required. Feels like a clinical protocol card.",
+        hashtags: ["#websitecheck", "#websitetips", "#webcare", "#SEOtips", "#smallbusiness"]
+      },
+      {
+        day: "Thu", date: "Jul 10", type: "carousel", pillar: "Routine Breakdown",
+        title: "Before / after: a cleanse in action",
+        hook: "Foundation can't fix a website that was never prepped.",
+        slides: "7 slides: Cover (problem statement) → 'Before' slide: client's old headline, cluttered nav, vague CTA → explanation of what each issue signals → 'After' slide: revised headline, simplified nav, direct CTA → Result: more enquiries in first 30 days → Final: 'The Cleanse is step one. Book yours.'",
+        caption: "A website that looks busy is usually a website that hasn't been audited. This is what a Cleanse changed for one of our clients — before the full build even started. ✦",
+        notes: "Anonymised client case. Keep before/after treatment like a clinical comparison, not a 'transformation' post. The before isn't embarrassing — it's diagnostic.",
+        hashtags: ["#websiterebrand", "#webdesignbefores", "#webcare", "#brandaudit", "#webdesigner"]
+      },
+      {
+        day: "Fri", date: "Jul 11", type: "single", pillar: "Texture Shot",
+        title: "Pull quote: the Webcare positioning statement",
+        hook: "(Visual quote post — ambient brand building)",
+        slides: "Single graphic: typography-forward layout. Quote: 'Your website isn't a brochure. It's the first thing a client touches.' — Minisite Studio. Clean cream background, serif display font.",
+        caption: "This is what Webcare is built around. 🌿",
+        notes: "Brand voice moment. Should feel like a print editorial quote card — not a motivational Instagram post. Restraint in design.",
+        hashtags: ["#webstudio", "#brandvoice", "#webcare", "#webdesignstudio", "#smallbusinessbranding"]
+      },
+      {
+        day: "Sat", date: "Jul 12", type: "carousel", pillar: "Daily Routine Tips",
+        title: "Why your contact page is losing you clients",
+        hook: "People who reach your contact page want to get in touch. Make it easy.",
+        slides: "6 slides: Hook → Mistake 1: Form with 8 required fields → Mistake 2: No phone or email shown → Mistake 3: No indication of response time → Mistake 4: No reassurance copy → Mistake 5: Contact page buried in nav → Fix: 'One form, one phone/email, one promise of when they'll hear back.'",
+        caption: "The contact page is where warm leads go cold. Five things that might be happening on yours right now. 🧴 #webcare",
+        notes: "Actionable tips carousel. Each slide: problem in bold, fix below. Should feel like a specialist's audit checklist.",
+        hashtags: ["#websitetips", "#UXdesign", "#webcare", "#conversionrate", "#smallbusinesstips"]
+      }
+    ]
+  },
+  {
+    label: "Week 3",
+    dates: "Jul 15–19",
+    theme: "Treatment — what working with us looks like",
+    posts: [
+      {
+        day: "Tue", date: "Jul 15", type: "carousel", pillar: "Dermatologist Recommended",
+        title: "Client testimonial: 'I finally feel like my website works'",
+        hook: "A good dermatologist doesn't ask you to trust the process. They show you the results.",
+        slides: "5 slides: Cover (quote teaser) → Client context: service business, had DIY site for 3 years → What they came in with → What changed after the Serum → Their words, verbatim, styled as a clinical report",
+        caption: "'I'd had the same website for three years. I knew it wasn't working but I didn't know why.' Here's what changed. ✦",
+        notes: "Testimonial presented as a case study, not a glowing review. Clinical format. Client name/business type only — no logo unless cleared.",
+        hashtags: ["#clientresults", "#webdesign", "#webcare", "#websiterebrand", "#smallbusinesswebsite"]
+      },
+      {
+        day: "Wed", date: "Jul 16", type: "reel", pillar: "Patch Test",
+        title: "What happens in a Skin Check? (The free discovery call, demystified)",
+        hook: "Most people don't book a discovery call because they're not sure what happens.",
+        slides: "Reel: walk through the 3 things covered in a Skin Check — what they tell us (their current site + goals), what we diagnose (the 3 biggest issues), what they leave with (a written summary). End with: 'It's free. It's 30 minutes. You'll leave knowing exactly what your site needs.'",
+        caption: "The Skin Check is how we start every client relationship. No pitch. No jargon. Just a clear picture of where your website stands. 🔬 Link in bio.",
+        notes: "This reel directly drives bookings. Calm, clinical tone. Could be text-on-screen or soft VO. Should feel like a GP explaining a consultation.",
+        hashtags: ["#discoverycall", "#webdesigner", "#webcare", "#freeconsultation", "#smallbusiness"]
+      },
+      {
+        day: "Thu", date: "Jul 17", type: "carousel", pillar: "Ingredient Label",
+        title: "The Serum — what's in our flagship build",
+        hook: "The best serum is formulated for your skin. Not a template.",
+        slides: "7 slides: Cover → 'Active Ingredients' of the Serum: custom design / brand voice development / responsive build / SEO foundation / accessibility check / 30-day aftercare → Slide per ingredient with short description → Final: 'Formulated from scratch. No templates.'",
+        caption: "Not all serums are created equal. Here's exactly what's in ours — and why each ingredient is there. 🧴",
+        notes: "INCI label format again — this is the core service sell. Should feel like a luxury product spec sheet, not a services page.",
+        hashtags: ["#webdesign", "#brandidentity", "#webcare", "#websitebuild", "#customwebdesign"]
+      },
+      {
+        day: "Fri", date: "Jul 18", type: "single", pillar: "Texture Shot",
+        title: "WIP process shot — design in progress",
+        hook: "(Behind the scenes — no hook needed)",
+        slides: "Single image or short GIF: screen detail of a design in Figma — colour palette chips, type specimen, component grid. Apothecary palette. Wordmark in corner.",
+        caption: "In the lab. 🌿",
+        notes: "Keep it minimal. Don't over-explain. The caption should be as sparse as the image. Two-word captions can be the most confident.",
+        hashtags: ["#figmadesign", "#webdesignprocess", "#brandingdesign", "#webcare", "#designstudio"]
+      },
+      {
+        day: "Sat", date: "Jul 19", type: "carousel", pillar: "Daily Routine Tips",
+        title: "How to write the headline on your homepage",
+        hook: "Most homepage headlines describe the business. The best ones describe the outcome.",
+        slides: "6 slides: Hook → The formula: [What you do] + [Who for] + [What they get] → 3 bad headline examples (generic) → Same 3 rewritten → Rule: lead with the result, not the method → CTA: 'Not sure yours lands? We check it in the Skin Check.'",
+        caption: "Your homepage headline has one job: make the right person feel immediately understood. Here's how to write one that does. ✦",
+        notes: "This is copywriting advice framed through Webcare. Practical, precise. Could perform very well as a save-and-share post.",
+        hashtags: ["#copywriting", "#websitetips", "#webcare", "#UXwriting", "#smallbusiness"]
+      }
+    ]
+  },
+  {
+    label: "Week 4",
+    dates: "Jul 22–26",
+    theme: "Maintenance — care over time",
+    posts: [
+      {
+        day: "Tue", date: "Jul 22", type: "carousel", pillar: "Routine Breakdown",
+        title: "Why your website needs a moisturiser (ongoing care, explained)",
+        hook: "You wouldn't do one facial and declare your skin sorted forever.",
+        slides: "6 slides: Hook → What breaks down over time: outdated copy, broken links, slow images, missed plugin updates → What Moisturiser covers: monthly check-in, content updates, performance monitoring → Why it costs less than a rebuild → Signs you need it → Final: 'Retainer from [price]. Book a Skin Check to see if it's right for you.'",
+        caption: "Websites don't maintain themselves. Here's what the Moisturiser retainer keeps in check — every month. 🧴",
+        notes: "Retainer sell. Should feel reassuring, not salesy. Use the skincare parallel to make ongoing maintenance feel logical, not upsold.",
+        hashtags: ["#websitemaintenance", "#webretainer", "#webcare", "#webdesign", "#smallbusiness"]
+      },
+      {
+        day: "Wed", date: "Jul 23", type: "reel", pillar: "Daily Routine Tips",
+        title: "3 signs your website needs a spot treatment, not a full rebuild",
+        hook: "You don't always need a new routine. Sometimes it's just one thing.",
+        slides: "Reel: three scenarios — landing page for a new offer but site looks inconsistent, pricing page is doing the work but the layout is confusing, one-page site needed for an event. For each: 'This isn't a rebuild. This is a spot treatment.' End: 'The Minisite Kit starts at [price]. One page, done right.'",
+        caption: "Not every skin issue needs a full routine overhaul. Sometimes you just need a targeted treatment. The same is true for your website. 🔬",
+        notes: "This is the lead-gen reel for the Spot Treatment / Minisite Kit. Speaks to people who think they need more than they do. Calm and reassuring.",
+        hashtags: ["#landingpage", "#minisitekit", "#webcare", "#webdesign", "#smallbusiness"]
+      },
+      {
+        day: "Thu", date: "Jul 24", type: "carousel", pillar: "Dermatologist Recommended",
+        title: "What our clients say about the Skin Check",
+        hook: "The Skin Check is free. These are the conversations it starts.",
+        slides: "5 slides: Cover → 3 short client quotes, one per slide, each about a different outcome (clarity, confidence, understanding) → Final: 'It's 30 minutes. It's free. You'll leave knowing more about your website than you did before.'",
+        caption: "Three people who booked a Skin Check — and what they said afterwards. ✦ Link in bio.",
+        notes: "Social proof for the free diagnostic. Should feel like reviews in a clinical chart, not Instagram testimonial graphics. Simple, text-led.",
+        hashtags: ["#clienttestimonial", "#webdesign", "#webcare", "#websiteaudit", "#smallbusiness"]
+      },
+      {
+        day: "Fri", date: "Jul 25", type: "single", pillar: "Texture Shot",
+        title: "End of month brand moment — the studio in summer",
+        hook: "(Ambient — no hook)",
+        slides: "Single image: amber light, botanical props, possibly a printed brand guide or Pantone chip alongside the dropper bottle. Feels like a still life. Wordmark only.",
+        caption: "July. ✦",
+        notes: "Minimal. The caption is the date. This kind of restraint builds brand equity over time — lets the visual carry it.",
+        hashtags: ["#brandidentity", "#webstudio", "#webcare", "#apothecaryaesthetic", "#designstudio"]
+      },
+      {
+        day: "Sat", date: "Jul 26", type: "carousel", pillar: "Ingredient Label",
+        title: "What 'mobile-first' actually means for your website",
+        hook: "Over 60% of your visitors are looking at your website on a phone. Is it ready?",
+        slides: "6 slides: Hook with stat → What 'mobile-first' doesn't mean (just making it smaller) → What it does mean: hierarchy, tap targets, load speed, readable type → 3 common mobile failures → How we test for mobile in every build → Final: 'Check yours on mobile right now. Does it pass?'",
+        caption: "Mobile-first isn't a feature. It's a baseline. Here's what it actually means — and what to look for on your own site. 🧴",
+        notes: "Education carousel. Practical, specific. Should feel like a spec sheet — this is what mobile-first means when it's built into the formula.",
+        hashtags: ["#mobilewebdesign", "#websitetips", "#webcare", "#responsivedesign", "#smallbusiness"]
+      }
+    ]
+  }
+];
+
+const typeConfig = {
+  carousel: { label: "Carousel", icon: "ti-layout-grid", cls: "type-carousel" },
+  single: { label: "Single / GIF", icon: "ti-photo", cls: "type-single" },
+  reel: { label: "Reel", icon: "ti-player-play", cls: "type-reel" }
+};
+
+let activeId = null;
+
+function render() {
+  const container = document.getElementById('weeks-container');
+  container.innerHTML = '';
+
+  weeks.forEach((week, wi) => {
+    const weekEl = document.createElement('div');
+    weekEl.className = 'week';
+    weekEl.innerHTML = `
+      <div class="week-header">
+        <span class="week-label">${week.label} · ${week.dates}</span>
+        <span class="week-theme">${week.theme}</span>
+      </div>
+      <div class="posts" id="posts-${wi}"></div>
+      <div class="detail-panel" id="detail-${wi}"></div>
+    `;
+    container.appendChild(weekEl);
+
+    const postsEl = weekEl.querySelector(`#posts-${wi}`);
+    week.posts.forEach((post, pi) => {
+      const id = `${wi}-${pi}`;
+      const tc = typeConfig[post.type];
+      const postEl = document.createElement('div');
+      postEl.className = 'post' + (activeId === id ? ' active' : '');
+      postEl.id = `post-${id}`;
+      postEl.innerHTML = `
+        <div class="post-day">${post.day}</div>
+        <div class="post-date">${post.date}</div>
+        <span class="type-badge ${tc.cls}"><i class="ti ${tc.icon}" aria-hidden="true" style="font-size:11px"></i>${tc.label}</span>
+        <div class="post-pillar">${post.pillar}</div>
+        <div class="post-title">${post.title}</div>
+      `;
+      postEl.addEventListener('click', () => toggleDetail(wi, pi, post));
+      postsEl.appendChild(postEl);
+    });
+  });
+}
+
+function toggleDetail(wi, pi, post) {
+  const id = `${wi}-${pi}`;
+  const panel = document.getElementById(`detail-${wi}`);
+  const tc = typeConfig[post.type];
+
+  if (activeId === id) {
+    activeId = null;
+    panel.classList.remove('show');
+    panel.innerHTML = '';
+    document.getElementById(`post-${id}`).classList.remove('active');
+    return;
+  }
+
+  if (activeId) {
+    const [oldWi, oldPi] = activeId.split('-');
+    document.getElementById(`post-${activeId}`)?.classList.remove('active');
+    if (oldWi !== String(wi)) {
+      document.getElementById(`detail-${oldWi}`)?.classList.remove('show');
+    }
+  }
+
+  activeId = id;
+  document.getElementById(`post-${id}`).classList.add('active');
+
+  const tagsHtml = post.hashtags.map(t => `<span class="tag">${t}</span>`).join('');
+
+  panel.innerHTML = `
+    <button class="detail-close" onclick="closeDetail(${wi},'${id}')">close ×</button>
+    <div class="detail-title"><span class="type-badge ${tc.cls}" style="margin-right:8px"><i class="ti ${tc.icon}" aria-hidden="true" style="font-size:11px"></i>${tc.label}</span>${post.title}</div>
+    <div class="detail-hook">${post.hook}</div>
+    <div class="detail-grid">
+      <div class="detail-section">
+        <div class="detail-label">Slide / content structure</div>
+        <div class="detail-content">${post.slides}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Production notes</div>
+        <div class="detail-content">${post.notes}</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem">
+      <div class="detail-label">Caption draft</div>
+      <div class="caption-preview" style="margin-top:6px">${post.caption}</div>
+    </div>
+    <div style="margin-top:1rem">
+      <div class="detail-label">Suggested hashtags</div>
+      <div class="tags">${tagsHtml}</div>
+    </div>
+  `;
+  panel.classList.add('show');
+}
+
+function closeDetail(wi, id) {
+  activeId = null;
+  document.getElementById(`post-${id}`)?.classList.remove('active');
+  document.getElementById(`detail-${wi}`).classList.remove('show');
+}
+
+render();
+</script>
